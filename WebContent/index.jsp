@@ -1,29 +1,97 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html lang="fr">
 	<head>
-		<title>在Form表单中使用验证码</title>
-		<script type="text/javascript">
-		//刷新验证码
-		function changeImg(){
-			var str = '${pageContext.request.contextPath}/servlet/DrawImage?t='+Math.random();
-			//在末尾加Math.random()的作用：
-			//如果两次请求地址一样，服务器只会处理第一次请求，第二次请求返回内容和第一次一样。或者说如果地址相同，第一次请求时，将自动缓存，导致第二次不会重复请求了。Math.random()是调用javascript语法中的数学函数，能够产生随机数。
-			//末尾加Math.random()使每次请求地址不相同，服务器每次都去做不同的响应。也可以使用new date()时间戳的形式作为参数传递。
-			document.getElementById('validateCodeImg').src=str;
-		}
-		</script>
+		<title>PanpanLand</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<!-- 在移动设备浏览器上，通过为视口（viewport）设置 meta 属性为 user-scalable=no 可以禁用其缩放（zooming）功能。这样禁用缩放功能后，用户只能滚动屏幕，就能让你的网站看上去更像原生应用的感觉。注意，这种方式我们并不推荐所有网站使用，还是要看你自己的情况而定！ -->
 	</head>
 	<body>
-		<form action="${pageContext.request.contextPath}/servlet/CheckServlet" method="post">
-			验证码：<input type="text" name="validateCode"/>
-			<img src="${pageContext.request.contextPath}/servlet/DrawImage" id="validateCodeImg" onclick="changeImg()">
-			<!-- <a href="javascript:void(0)" onclick="changeImg()">看不清，换一张</a> 
-			javascript:void(0) 当用户链接时，void(0) 计算为 0，但 Javascript 上没有任何效果
-			去掉href 又不能显示超链接了 -->
-			<a href="javascript:changeImg()">看不清，换一张</a>
-			<br/>
-			<input type="submit" value="提交">
-		</form>
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js?t=<?php echo time(); ?>" ></script>
+		<link href="css/bootstrap.min.css?t=<?php echo time(); ?>" rel="stylesheet" type="text/css"/>
+		<!-- <ul class="nav nav-tabs">
+			  <li role="presentation" class="active"><a href="#">Home</a></li>
+			  <li role="presentation"><a href="#">Profile</a></li>
+			  <li role="presentation"><a href="#">Messages</a></li>
+		</ul>  -->
+		<div class="container">
+			<div class="navbar navbar-default">
+				<div class="container-fluid">
+					<div id="sn-left">
+						<div class="topwenzi-1">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+						<div class="language-box-show">
+							<div class="switch-language">
+								<div class="language-selector ctr-info" ctr="{'area':'languague'}">
+									<a class="btn btn-mini dropdown-toggle languagetoggleclass" data-toggle="dropdown" href="javascript:void(0);">
+										<em class="litb-icon-flag fr"></em>
+										<span class="curCountry" data-abbr="fr" data-country-name="France">
+										France
+										</span>
+									</a>
+									<div class="dropdown-menu" style="display:none;" role="menu" aria-labelleby="dLabel">
+										<div class="filter-input">
+											<em class="litb-icon-search"></em>
+											<input name="c_name" id="c_name" onkeydown="show_languages(this.value);" onkeyup="show_languages(this.value);" type="text">
+										</div>
+										<div class="languague-list">
+											<ul class="reco-country-list">
+												<li><a ctr="{&quot;change_to_country&quot;:&quot;us&quot;}" href="javascript:void(0);"><em class="litb-icon-flag fr"></em><span class="english" data-abbr="fr">France</span><span class="chinese">法国</span></a></li>
+												<li><a ctr="{&quot;change_to_country&quot;:&quot;au&quot;}" href="javascript:void(0);"><em class="litb-icon-flag cn"></em><span class="english" data-abbr="cn">Australia</span><span class="chinese">中国</span></a></li>
+												<li><a ctr="{&quot;change_to_country&quot;:&quot;ca&quot;}" href="javascript:void(0);"><em class="litb-icon-flag us"></em><span class="english" data-abbr="us">Canada</span><span class="chinese">美国</span></a></li>
+												<li><a ctr="{&quot;change_to_country&quot;:&quot;gb&quot;}" href="javascript:void(0);"><em class="litb-icon-flag gb"></em><span class="english" data-abbr="gb">United Kingdom</span><span class="chinese">英国</span></a></li>
+											</ul>
+										</div>
+										<div class="no-result" style="display:none;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="topwenzi-1">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+					</div>
+					<div id="sn-right">
+						<div class="sn-container">
+							<p id="login-info" class="sn-login-info">
+								<em>Coucou, Bienvenu chez PanpanLand</em>
+								<a class="sn-login" href="#" target="_top">Se connecter</a>
+								<a class="sn-register" href="#" target="_top">Créer un compte</a>
+							</p>
+							<ul class="sn-quick-menu">
+								<li class="">
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<%@include file="menu.jsp" %>
+    		<form class="form-horizontal">
+  				<div class="form-group">
+    				<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+    				<div class="col-sm-10">
+      					<input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+    				</div>
+  				</div>
+  				<div class="form-group">
+    				<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    				<div class="col-sm-10">
+      					<input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+    				</div>
+  				</div>
+  				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <div class="checkbox">
+				        <label>
+				          <input type="checkbox"> Remember me
+				        </label>
+				      </div>
+				    </div>
+				</div>
+				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-default">Sign in</button>
+				    </div>
+				</div>
+			</form>
+		</div>
 	</body>
 </html>
